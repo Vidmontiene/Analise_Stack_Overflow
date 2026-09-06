@@ -25,6 +25,18 @@ def top_ano_SQL(ano, qt):
   )
 
   return cursor.fetchall()
+def top_devweb(ano):
+  cursor.execute(f"""    SELECT
+      ano,
+      linguagem_original,
+      COUNT(*) AS quantidade
+    FROM stackoverflow_linguagens_2011_2025_long
+    WHERE tipo = "ja_trabalhou" AND ano = {ano} and ( linguagem_original="C#" or linguagem_original= "Python" or linguagem_original= "Java" or linguagem_original= "PHP" or linguagem_original= "Ruby" or linguagem_original= "JavaScript" )
+    GROUP BY ano, linguagem_original
+    ORDER BY ano, quantidade DESC
+    """
+    )
+  return cursor.fetchall()
 
 # Pega as top 10 linguagens de cada ano
 def pegar_top_10_por_ano():
@@ -54,11 +66,12 @@ def lineplot():
   anos = [str(x) for x in range(2011, 2026)]
   geral = []
   for ano in anos:
-    resultado = top_ano_SQL(ano, 5)
+    resultado = top_devweb(ano)
     for linha in resultado:
-      if linha[1] == "Bash/Shell (all shells)":
-        print('entrou aquyi')
+      if linha[1] == "Bash/Shell (all shells)" or linha[1] == "Bash/Shell/PowerShell":
         linha = (linha[0], "Bash/Shell", linha[2])
+      elif linha[1]=="HTML" or linha[1]=="CSS":
+        linha=(linha[0], "HTML/CSS",linha[2])
       geral.append(linha)
 
   geral = pd.DataFrame(
