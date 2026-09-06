@@ -6,6 +6,7 @@ conexao = sqlite3.connect('bancos/pesquisa.db')
 encodings = ['utf-8', 'cp1252', 'latin1']
 
 for arquivo in os.listdir('dados'):
+  
   print('Começando exportação... ')
   if not arquivo.endswith('.csv'):
     continue
