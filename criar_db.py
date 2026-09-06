@@ -1,35 +1,39 @@
 import sqlite3
 import pandas as pd
+import os
 
-# Antes de rodar, criar o diretório "bancos" no caminho principal
-
-anos = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011']
 conexao = sqlite3.connect('bancos/pesquisa.db')
-encoding = ['utf-8', 'cp1252', 'latin1']
+encodings = ['utf-8', 'cp1252', 'latin1']
 
-for ano in anos:
+for arquivo in os.listdir('dados'):
+  print('Começando exportação... ')
+  if not arquivo.endswith('.csv'):
+    continue
 
-  if ano == '2015':
-    df = pd.read_csv(
-      f"dados/{ano}.csv",
-      header=1,
-      low_memory=False
-    )
-  else:
-    for enc in encoding:
-      try:
-        df = pd.read_csv(f"dados/{ano}.csv", encoding=enc, low_memory=False)
-        break
-      except UnicodeDecodeError:
-        continue
+  # Nome do arquivo sem a extensão
+  nome_tabela = os.path.splitext(arquivo)[0]
+
+  caminho = os.path.join('dados', arquivo)
+
+  # Tenta as codificações
+  for encoding in encodings:
+    try:
+      df = pd.read_csv(
+        caminho,
+        encoding=encoding,
+        low_memory=False
+      )
+      break
+    except UnicodeDecodeError:
+      continue
 
   df.to_sql(
-    f"pesquisa_{ano}",
+    nome_tabela,
     conexao,
-    if_exists="replace",
+    if_exists='replace',
     index=False
   )
 
-  print(f'Tabela {ano} criada com sucesso')
+  print(f'Tabela {nome_tabela} criada com sucesso')
 
 conexao.close()
