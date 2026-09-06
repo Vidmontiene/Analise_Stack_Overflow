@@ -2,8 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
+from pathlib import Path
 
-conexao = sqlite3.connect("bancos/pesquisa.db")
+BASE_DIR = Path(__file__).resolve().parent
+BANCO_DIR = BASE_DIR / "bancos"
+BANCO_DIR.mkdir(exist_ok=True)
+conexao = sqlite3.connect(BANCO_DIR / "pesquisa.db")
 cursor = conexao.cursor()
 
 #SQL do top 10
@@ -91,3 +95,76 @@ def top_ano_SQL(ano, qt):
   )
 
   return cursor.fetchall()
+
+# Pega as categorias ao longo dos anos
+def top_devweb(ano):
+  return top_ano_SQL(ano, 100)
+
+# Pega as top 10 linguagens de cada ano
+def pegar_top_10_por_ano():
+  anos = [str(x) for x in range(2011, 2026)]
+  diretorio_saida = BASE_DIR / "graficos" / "top10_por_ano"
+  diretorio_saida.mkdir(parents=True, exist_ok=True)
+
+  for ano in anos:
+    resultado = top_ano_SQL(ano, 10)
+
+    linguagens = [linha[1] for linha in resultado]
+    quantidades = [linha[2] for linha in resultado]
+
+    figura = plt.figure(figsize=(12, 6))
+
+    plt.bar(linguagens, quantidades)
+
+    plt.title(f'Top 10 linguagens mais usadas em {ano}')
+    plt.xlabel('Linguagem')
+    plt.ylabel('Quantidade')
+
+    plt.xticks(rotation=45, ha='right')
+
+    plt.tight_layout()
+    figura.savefig(diretorio_saida / f'top10_{ano}.png', dpi=300)
+    plt.close(figura)
+
+# Lineplot
+def lineplot():
+  anos = [str(x) for x in range(2011, 2026)]
+  geral = []
+  for ano in anos:
+    resultado = top_devweb(ano)
+    geral.extend(resultado)
+
+  geral = pd.DataFrame(
+    geral,
+    columns=['ano', 'linguagem', 'quantidade']
+  )
+
+  diretorio_saida = BASE_DIR / "graficos" / "lineplot"
+  diretorio_saida.mkdir(parents=True, exist_ok=True)
+  figura = plt.figure(figsize=(12, 6))
+  sns.lineplot(
+    data=geral,
+    x='ano',
+    y='quantidade',
+    hue='linguagem'
+  )
+  plt.xticks(geral["ano"].unique())
+
+  # Legenda à esquerda
+  plt.legend(
+    title='Linguagens',
+    loc='upper left',
+  )
+  plt.title('Uso das linguagens de desenvolvimento web ao longo dos anos')
+  plt.xlabel('Ano')
+  plt.ylabel('Quantidade')
+  plt.tight_layout()
+
+  figura.savefig(diretorio_saida / 'linguagens_por_ano.png', dpi=300)
+  plt.close(figura)
+
+if __name__ == "__main__":
+  pegar_top_10_por_ano()
+  lineplot()
+
+conexao.close()
