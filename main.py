@@ -86,8 +86,9 @@ def lineplot():
     y='quantidade',
     hue='linguagem_original'
   )
+  plt.xticks(geral["ano"].unique())
 
-  plt.title('Uso das linguagens ao longo dos anos')
+  plt.title('Uso das linguagens de desenvolvimento web ao longo dos anos')
   plt.xlabel('Ano')
   plt.ylabel('Quantidade')
   plt.tight_layout()
