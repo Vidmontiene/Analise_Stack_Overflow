@@ -76,7 +76,7 @@ def lineplot():
 
   geral = pd.DataFrame(
     geral,
-    columns=['ano', 'linguagem_original', 'quantidade']
+    columns=['ano', 'linguagem', 'quantidade']
   )
 
   plt.figure(figsize=(12, 6))
@@ -84,10 +84,15 @@ def lineplot():
     data=geral,
     x='ano',
     y='quantidade',
-    hue='linguagem_original'
+    hue='linguagem'
   )
   plt.xticks(geral["ano"].unique())
 
+  # Legenda à esquerda
+  plt.legend(
+    title='Linguagens',
+    loc='upper left',
+  )
   plt.title('Uso das linguagens de desenvolvimento web ao longo dos anos')
   plt.xlabel('Ano')
   plt.ylabel('Quantidade')
