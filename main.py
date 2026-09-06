@@ -1,13 +1,14 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import sqlite3
 
 conexao = sqlite3.connect("bancos/pesquisa.db")
 cursor = conexao.cursor()
 
 # SQL do top 10
-def top_10_ano(ano):
+def top_ano_SQL(ano, qt):
 
   cursor.execute(
     f"""
@@ -16,10 +17,10 @@ def top_10_ano(ano):
       linguagem_original,
       COUNT(*) AS quantidade
     FROM stackoverflow_linguagens_2011_2025_long
-    WHERE ano = {ano}
+    WHERE tipo = "ja_trabalhou" AND ano = {ano}
     GROUP BY ano, linguagem_original
     ORDER BY ano, quantidade DESC
-    LIMIT 10
+    LIMIT {qt}
     """
   )
 
@@ -30,10 +31,11 @@ def pegar_top_10_por_ano():
   anos = [str(x) for x in range(2011, 2026)]
 
   for ano in anos:
-    resultado = top_10_ano(ano)
+    resultado = top_ano_SQL(ano, 10)
 
     linguagens = [linha[1] for linha in resultado]
     quantidades = [linha[2] for linha in resultado]
+
     plt.figure(figsize=(12, 6))
 
     plt.bar(linguagens, quantidades)
@@ -46,6 +48,40 @@ def pegar_top_10_por_ano():
 
     plt.tight_layout()
     plt.savefig(f'graficos/top10_por_ano/top10_{ano}.png', dpi=300)
+
+# Lineplot
+def lineplot():
+  anos = [str(x) for x in range(2011, 2026)]
+  geral = []
+  for ano in anos:
+    resultado = top_ano_SQL(ano, 5)
+    for linha in resultado:
+      if linha[1] == "Bash/Shell (all shells)":
+        print('entrou aquyi')
+        linha = (linha[0], "Bash/Shell", linha[2])
+      geral.append(linha)
+
+  geral = pd.DataFrame(
+    geral,
+    columns=['ano', 'linguagem_original', 'quantidade']
+  )
+
+  plt.figure(figsize=(12, 6))
+  sns.lineplot(
+    data=geral,
+    x='ano',
+    y='quantidade',
+    hue='linguagem_original'
+  )
+
+  plt.title('Uso das linguagens ao longo dos anos')
+  plt.xlabel('Ano')
+  plt.ylabel('Quantidade')
+  plt.tight_layout()
+
+  plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
+
+lineplot()
 
 conexao.close()
     
