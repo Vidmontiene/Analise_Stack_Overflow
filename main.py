@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
@@ -25,8 +24,12 @@ def top_ano_SQL(ano, qt):
   )
 
   return cursor.fetchall()
+
+# Pega linguagens ao longo dos anos
 def top_devweb(ano):
-  cursor.execute(f"""    SELECT
+  cursor.execute(
+    f"""
+    SELECT
       ano,
       linguagem_original,
       COUNT(*) AS quantidade
@@ -100,7 +103,7 @@ def lineplot():
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
-lineplot()
+# lineplot()
+# pegar_top_10_por_ano()
 
 conexao.close()
-    
