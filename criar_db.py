@@ -1,12 +1,23 @@
 import sqlite3
 import pandas as pd
 import os
+from pathlib import Path
 
-os.makedirs('bancos', exist_ok=True)
-conexao = sqlite3.connect('bancos/pesquisa.db')
+BASE_DIR = Path(__file__).resolve().parent
+dados_dir = BASE_DIR / 'dados'
+bancos_dir = BASE_DIR / 'bancos'
+bancos_dir.mkdir(exist_ok=True)
+
+if not dados_dir.exists():
+  raise FileNotFoundError(
+    f'Pasta de dados não encontrada: {dados_dir}. '
+    'Coloque os CSVs na pasta dados antes de executar este script.'
+  )
+
+conexao = sqlite3.connect(bancos_dir / 'pesquisa.db')
 encodings = ['utf-8', 'cp1252', 'latin1']
 
-for arquivo in os.listdir('dados'):
+for arquivo in os.listdir(dados_dir):
   
   print('Começando exportação... ')
   if not arquivo.endswith('.csv'):
@@ -15,7 +26,7 @@ for arquivo in os.listdir('dados'):
   # Nome do arquivo sem a extensão
   nome_tabela = os.path.splitext(arquivo)[0]
 
-  caminho = os.path.join('dados', arquivo)
+  caminho = dados_dir / arquivo
 
   # Tenta as codificações
   for encoding in encodings:
