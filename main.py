@@ -60,6 +60,46 @@ def gerar_lineplot(dados: pd.DataFrame) -> None:
     figura.savefig(diretorio / "linguagens_por_ano.png", dpi=300)
     plt.close(figura)
 
+def gerar_categorias_percentuais(dados: pd.DataFrame) -> None:
+    """Generate yearly 100% stacked bars for the ten leading categories."""
+    totais = dados.groupby("language_type")["occurrences"].sum()
+    principais = totais.nlargest(10).index.tolist()
+    dados = dados.copy()
+    dados["category"] = dados["language_type"].where(
+        dados["language_type"].isin(principais),
+        "Outras",
+    )
+    dados = dados.groupby(["year", "category"], as_index=False)["occurrences"].sum()
+
+    tabela = (
+        dados.pivot(index="year", columns="category", values="occurrences")
+        .fillna(0)
+    )
+    tabela = tabela.div(tabela.sum(axis=1), axis=0).mul(100)
+    categorias = ["Outras"] + sorted(principais, key=totais.get)
+    tabela = tabela.reindex(columns=categorias, fill_value=0)
+
+    figura, eixo = plt.subplots(figsize=(14, 7))
+    cores = plt.get_cmap("tab20").colors
+    for indice, categoria in enumerate(categorias):
+        eixo.bar(
+            tabela.index,
+            tabela[categoria],
+            bottom=tabela[categorias[:indice]].sum(axis=1),
+            label=categoria,
+            color="#9e9e9e" if categoria == "Outras" else cores[indice - 1],
+        )
+
+    eixo.set_title("Principais categorias de tecnologia usadas ao longo dos anos")
+    eixo.set_xlabel("Ano")
+    eixo.set_ylabel("Participação (%)")
+    eixo.set_ylim(0, 100)
+    eixo.set_xticks(sorted(tabela.index))
+    eixo.legend(title="Tecnologia", bbox_to_anchor=(1.02, 1), loc="upper left")
+    figura.tight_layout()
+    figura.savefig(GRAPHICS_DIR / "categorias_tecnologia_anos.png", dpi=300)
+    plt.close(figura)
+
 
 def main() -> None:
     if not DATABASE_PATH.exists():
@@ -71,6 +111,7 @@ def main() -> None:
     if dados.empty:
         raise ValueError("O banco não contém ocorrências para gerar gráficos.")
     gerar_top10_por_ano(dados)
+    gerar_categorias_percentuais(dados)
     gerar_lineplot(dados)
     print(f"Gráficos gerados em: {GRAPHICS_DIR}")
 
