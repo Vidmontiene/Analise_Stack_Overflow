@@ -96,14 +96,14 @@ def lineplot():
     title='Linguagens',
     loc='upper left',
   )
-  plt.title('Uso das linguagens de desenvolvimento web ao longo dos anos')
+  plt.title('Evolução do uso de linguagens associadas ao desenvolvimento web ao longo dos anos')
   plt.xlabel('Ano')
   plt.ylabel('Quantidade')
   plt.tight_layout()
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
-# lineplot()
+lineplot()
 # pegar_top_10_por_ano()
 
 conexao.close()
