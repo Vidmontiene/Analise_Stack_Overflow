@@ -6,6 +6,60 @@ import sqlite3
 conexao = sqlite3.connect("bancos/pesquisa.db")
 cursor = conexao.cursor()
 
+LINGUAGEM_GRAFICO_SQL = """
+  CASE
+    WHEN linguagem IN ("Bash/Shell (all shells)", "Bash/Shell/PowerShell","PowerShell") THEN "Bash/Shell"
+    WHEN linguagem IN ("HTML", "CSS") THEN "HTML/CSS"
+    ELSE linguagem
+  END
+"""
+
+CORES_LINGUAGENS = {
+  "JavaScript": "#FFD600",
+  "SQL": "#D65F00",
+  "HTML/CSS": "#E34F26",
+  "Python": "#3776AB",
+  "Java": "#B07219",
+  "C#": "#68217A",
+  "TypeScript": "#3178C6",
+  "PHP": "#6F4E37",
+  "C++": "#8A2BE2",
+  "C": "#A8B9CC",
+  "Bash/Shell": "#4EAA25",
+  "Go": "#00ADD8",
+  "Ruby": "#CC342D",
+  "PowerShell": "#5391FE",
+  "Rust": "#DEA584",
+  "Kotlin": "#A97BFF",
+  "Swift": "#F05138",
+  "Assembly": "#6E4C13",
+  "R": "#276DC3",
+  "Objective-C": "#438EFF",
+  "Node.js": "#68A063",
+  "VBA": "#867DB1",
+  "Dart": "#0175C2",
+  "MATLAB": "#E16737",
+  "Scala": "#DC322F",
+  "Lua": "#000080",
+  "Perl": "#39457E",
+  "Groovy": "#4298B8",
+  "VB.NET": "#945DB7",
+}
+
+CORES_EXTRAS = sns.color_palette("tab20", 20).as_hex() + sns.color_palette("Set3", 12).as_hex()
+
+
+def cor_linguagem(linguagem):
+  if linguagem in CORES_LINGUAGENS:
+    return CORES_LINGUAGENS[linguagem]
+
+  indice = sum(ord(caractere) for caractere in linguagem) % len(CORES_EXTRAS)
+  return CORES_EXTRAS[indice]
+
+
+def paleta_linguagens(linguagens):
+  return {linguagem: cor_linguagem(linguagem) for linguagem in linguagens}
+
 # SQL do top 10
 def top_ano_SQL(ano, qt):
 
@@ -13,11 +67,11 @@ def top_ano_SQL(ano, qt):
     f"""
     SELECT
       ano,
-      linguagem_original,
+      {LINGUAGEM_GRAFICO_SQL} AS linguagem,
       COUNT(*) AS quantidade
     FROM stackoverflow_linguagens_2011_2025_long
     WHERE tipo = "ja_trabalhou" AND ano = {ano}
-    GROUP BY ano, linguagem_original
+    GROUP BY ano, linguagem
     ORDER BY ano, quantidade DESC
     LIMIT {qt}
     """
@@ -31,11 +85,11 @@ def top_devweb(ano):
     f"""
     SELECT
       ano,
-      linguagem_original,
+      {LINGUAGEM_GRAFICO_SQL} AS linguagem,
       COUNT(*) AS quantidade
     FROM stackoverflow_linguagens_2011_2025_long
-    WHERE tipo = "ja_trabalhou" AND ano = {ano} and ( linguagem_original="C#" or linguagem_original= "Python" or linguagem_original= "Java" or linguagem_original= "PHP" or linguagem_original= "Ruby" or linguagem_original= "JavaScript" )
-    GROUP BY ano, linguagem_original
+    WHERE tipo = "ja_trabalhou" AND ano = {ano} and ( linguagem="C#" or linguagem= "Python" or linguagem= "Java" or linguagem= "PHP" or linguagem= "Ruby" or linguagem= "JavaScript" )
+    GROUP BY ano, linguagem
     ORDER BY ano, quantidade DESC
     """
     )
@@ -53,7 +107,7 @@ def pegar_top_10_por_ano():
 
     plt.figure(figsize=(12, 6))
 
-    plt.bar(linguagens, quantidades)
+    plt.bar(linguagens, quantidades, color=[cor_linguagem(linguagem) for linguagem in linguagens])
 
     plt.title(f'Top 10 linguagens mais usadas em {ano}')
     plt.xlabel('Linguagem')
@@ -87,7 +141,8 @@ def lineplot():
     data=geral,
     x='ano',
     y='quantidade',
-    hue='linguagem'
+    hue='linguagem',
+    palette=paleta_linguagens(geral["linguagem"].unique())
   )
   plt.xticks(geral["ano"].unique())
 
@@ -103,7 +158,7 @@ def lineplot():
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
-# lineplot()
-# pegar_top_10_por_ano()
+lineplot()
+pegar_top_10_por_ano()
 
 conexao.close()
