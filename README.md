@@ -17,3 +17,11 @@ Arquivos gerados:
 - `dados/stackoverflow_linguagens_2011_2025_mapeamento_colunas.csv`: colunas usadas para extrair linguagens em cada ano.
 
 Na base longa, `tipo` separa `ja_trabalhou` de `quer_trabalhar`. Quando o questionario nao tinha coluna equivalente a desejo/futuro, a linguagem foi tratada como `ja_trabalhou`.
+
+## Criação do banco de dados
+
+Executar criar_db.py na pasta do projeto.
+
+## Geração das figuras
+
+Para gerar as figuras basta executar o arquivo main.py na pasta do projeto, após criar o Banco de Dados. 
