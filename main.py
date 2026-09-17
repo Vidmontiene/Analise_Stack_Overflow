@@ -87,6 +87,7 @@ def top_ano_SQL(ano, qt):
 
   return cursor.fetchall()
 
+<<<<<<< HEAD
 
 def total_pesquisas_respondidas_SQL(ano):
   cursor.execute(
@@ -101,6 +102,9 @@ def total_pesquisas_respondidas_SQL(ano):
   return resultado[0] if resultado else 0
 
 # Pega linguagens ao longo dos anos
+=======
+# SQL top linguagens web ao longo dos anos
+>>>>>>> 88ab7198f6b36b3b24b112073395b09d31489af0
 def top_devweb(ano):
   cursor.execute(
     f"""
@@ -116,7 +120,7 @@ def top_devweb(ano):
     )
   return cursor.fetchall()
 
-# Pega as top 10 linguagens de cada ano
+# Cria gráfico 10 linguagens de cada ano
 def pegar_top_10_por_ano():
   anos = [str(x) for x in range(2011, 2026)]
 
@@ -124,6 +128,8 @@ def pegar_top_10_por_ano():
     resultado = top_ano_SQL(ano, 10)
     total_respondidas = total_pesquisas_respondidas_SQL(ano)
 
+    # Número de respostas no top 10
+    print(f"{ano} - {len(resultado)} respostas")
     linguagens = [linha[1] for linha in resultado]
     quantidades = [linha[2] for linha in resultado]
 
@@ -140,7 +146,7 @@ def pegar_top_10_por_ano():
     plt.tight_layout()
     plt.savefig(f'graficos/top10_por_ano/top10_{ano}.png', dpi=300)
 
-# Lineplot
+# Cria gráfico Lineplot
 def lineplot():
   anos = [str(x) for x in range(2011, 2026)]
   geral = []
@@ -173,14 +179,18 @@ def lineplot():
     title='Linguagens',
     loc='upper left',
   )
-  plt.title('Uso das linguagens de desenvolvimento web ao longo dos anos')
+  plt.title('Evolução do uso de linguagens associadas ao desenvolvimento web ao longo dos anos')
   plt.xlabel('Ano')
   plt.ylabel('Quantidade')
   plt.tight_layout()
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
+<<<<<<< HEAD
 
+=======
+#lineplot()
+>>>>>>> 88ab7198f6b36b3b24b112073395b09d31489af0
 pegar_top_10_por_ano()
 
 conexao.close()
