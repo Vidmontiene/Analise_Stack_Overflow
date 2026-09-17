@@ -1,4 +1,8 @@
 import pandas as pd
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sqlite3
@@ -60,6 +64,10 @@ def cor_linguagem(linguagem):
 def paleta_linguagens(linguagens):
   return {linguagem: cor_linguagem(linguagem) for linguagem in linguagens}
 
+
+def formatar_total(valor):
+  return f'{valor:,}'.replace(',', '.')
+
 # SQL do top 10
 def top_ano_SQL(ano, qt):
 
@@ -78,6 +86,19 @@ def top_ano_SQL(ano, qt):
   )
 
   return cursor.fetchall()
+
+
+def total_pesquisas_respondidas_SQL(ano):
+  cursor.execute(
+    f"""
+    SELECT MAX(total_respostas_ano)
+    FROM stackoverflow_linguagens_2011_2025_resumo
+    WHERE ano = {ano}
+    """
+  )
+
+  resultado = cursor.fetchone()
+  return resultado[0] if resultado else 0
 
 # Pega linguagens ao longo dos anos
 def top_devweb(ano):
@@ -101,6 +122,7 @@ def pegar_top_10_por_ano():
 
   for ano in anos:
     resultado = top_ano_SQL(ano, 10)
+    total_respondidas = total_pesquisas_respondidas_SQL(ano)
 
     linguagens = [linha[1] for linha in resultado]
     quantidades = [linha[2] for linha in resultado]
@@ -109,7 +131,7 @@ def pegar_top_10_por_ano():
 
     plt.bar(linguagens, quantidades, color=[cor_linguagem(linguagem) for linguagem in linguagens])
 
-    plt.title(f'Top 10 linguagens mais usadas em {ano}')
+    plt.title(f'Total de pesquisas respondidas: {formatar_total(total_respondidas)}')
     plt.xlabel('Linguagem')
     plt.ylabel('Quantidade')
 
@@ -158,7 +180,7 @@ def lineplot():
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
-lineplot()
+
 pegar_top_10_por_ano()
 
 conexao.close()
