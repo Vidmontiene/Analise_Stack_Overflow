@@ -87,7 +87,6 @@ def top_ano_SQL(ano, qt):
 
   return cursor.fetchall()
 
-<<<<<<< HEAD
 
 def total_pesquisas_respondidas_SQL(ano):
   cursor.execute(
@@ -101,10 +100,7 @@ def total_pesquisas_respondidas_SQL(ano):
   resultado = cursor.fetchone()
   return resultado[0] if resultado else 0
 
-# Pega linguagens ao longo dos anos
-=======
 # SQL top linguagens web ao longo dos anos
->>>>>>> 88ab7198f6b36b3b24b112073395b09d31489af0
 def top_devweb(ano):
   cursor.execute(
     f"""
@@ -186,11 +182,7 @@ def lineplot():
 
   plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
-<<<<<<< HEAD
 
-=======
-#lineplot()
->>>>>>> 88ab7198f6b36b3b24b112073395b09d31489af0
 pegar_top_10_por_ano()
 
 conexao.close()
