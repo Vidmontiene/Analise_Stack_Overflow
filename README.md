@@ -1,6 +1,10 @@
 # Analise_Stack_Overflow
 Algoritmos para analisar dados do Stack Overflow
 
+## Pesquisas
+
+Os arquivos CSV usadas na criação dos gráficos estão disponíveis em [https://drive.google.com/drive/folders/1EMkkaWZIwP6XunUhbwFtrIFOTKEO3x9h](https://drive.google.com/drive/folders/1EMkkaWZIwP6XunUhbwFtrIFOTKEO3x9h)
+
 ## Preparacao das bases
 
 Para juntar os CSVs de `dados/2011.csv` ate `dados/2025.csv` e gerar a base analitica de linguagens:
