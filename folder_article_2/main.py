@@ -22,7 +22,8 @@ import pandas as pd
 # Caminhos
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent
-DATABASE_PATH = BASE_DIR / "bancos" / "pesquisa.db"
+PROJECT_DIR = BASE_DIR.parent
+DATABASE_PATH = PROJECT_DIR / "bancos" / "pesquisa.db"
 GRAFICOS_DIR = BASE_DIR / "graficos"
 TOP10_DIR = GRAFICOS_DIR / "top10_por_ano"
 EVOLUCAO_PATH = GRAFICOS_DIR / "evolucao_categorias.png"

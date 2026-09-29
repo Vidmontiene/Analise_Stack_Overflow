@@ -1,3 +1,12 @@
+"""
+Processa os CSVs brutos das pesquisas do Stack Overflow de 2011 a 2025.
+
+Identifica as colunas de linguagens apesar das mudanças de formato
+entre os anos, padroniza os nomes das linguagens, extrai os dados
+de "já trabalhou" e "quer trabalhar" e gera bases consolidadas
+e resumidas para análise estatística.
+"""
+
 import argparse
 import csv
 import re

@@ -1,3 +1,7 @@
+"""
+Converte os arquivos CSV da pasta dados em tabelas de um banco de dados SQLite.
+"""
+
 import sqlite3
 import pandas as pd
 import os

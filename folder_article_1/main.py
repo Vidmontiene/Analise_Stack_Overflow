@@ -1,3 +1,9 @@
+"""
+Cria os gráficos de Top 10 Linguagens por Ano e Evolução do uso de linguagens associadas ao desenvolvimento web ao longo dos anos.
+
+Esse processo é feito acessando os Bancos de dados SQLite.
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -62,7 +68,7 @@ def pegar_top_10_por_ano():
     plt.xticks(rotation=45, ha='right')
 
     plt.tight_layout()
-    plt.savefig(f'graficos/top10_por_ano/top10_{ano}.png', dpi=300)
+    plt.savefig(f'folder_article_1/graficos/top10_por_ano/top10_{ano}.png', dpi=300)
 
 # Lineplot
 def lineplot():
@@ -101,7 +107,7 @@ def lineplot():
   plt.ylabel('Quantidade')
   plt.tight_layout()
 
-  plt.savefig('graficos/lineplot/linguagens_por_ano.png', dpi=300)
+  plt.savefig('folder_article_1/graficos/lineplot/linguagens_por_ano.png', dpi=300)
 
 lineplot()
 # pegar_top_10_por_ano()

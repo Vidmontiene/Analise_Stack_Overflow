@@ -1,8 +1,13 @@
+"""
+Procura por arquivos na pasta "dados" que possuam a coluna informada.
+Aperte ENTER para encerrar o programa
+"""
+
 import csv
 from pathlib import Path
 
 def colher_arquivos(nome_coluna):
-  csv_files = sorted(Path("Dados").glob("*.csv"))
+  csv_files = sorted(Path("dados").glob("*.csv"))
   csv_files_with_column = []
 
   for csv_file in csv_files:
