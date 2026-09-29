@@ -17,6 +17,8 @@ pip install -r requirements.txt
 
 ## 💾 Preparação das bases
 
+Os arquivos CSV disponíveis no site do Stack Overflow podem ser consultados [aqui](https://drive.google.com/drive/folders/1EMkkaWZIwP6XunUhbwFtrIFOTKEO3x9h).
+
 Para juntar os CSVs de `dados/2011.csv` ate `dados/2025.csv` e gerar a base analítica de linguagens:
 
 ```bash
@@ -31,8 +33,6 @@ Arquivos gerados:
 - `dados/stackoverflow_linguagens_2011_2025_mapeamento_colunas.csv`: colunas usadas para extrair linguagens em cada ano.
 
 Na base longa, `tipo` separa `ja_trabalhou` de `quer_trabalhar`. Quando o questionário não tinha coluna equivalente a desejo/futuro, a linguagem foi tratada como `ja_trabalhou`.
-
-Os arquivos CSV gerados por essa etapa estão disponíveis [aqui](https://drive.google.com/drive/folders/1EMkkaWZIwP6XunUhbwFtrIFOTKEO3x9h).
 
 ## 📊 Geração das figuras
 
