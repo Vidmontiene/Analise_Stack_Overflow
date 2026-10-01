@@ -19,7 +19,7 @@ pip install -r requirements.txt
 
 Os arquivos CSV disponíveis no site do Stack Overflow podem ser consultados [aqui](https://drive.google.com/drive/folders/1EMkkaWZIwP6XunUhbwFtrIFOTKEO3x9h).
 
-Para juntar os CSVs de `dados/2011.csv` ate `dados/2025.csv` e gerar a base analítica de linguagens:
+Para juntar os CSVs de `dados/2011.csv` até `dados/2025.csv` e gerar a base analítica de linguagens:
 
 ```bash
 python preparar_bases_linguagens.py
