@@ -62,7 +62,7 @@ python .\folder_article_2\main.py
 - [João Nunes](https://github.com/jaovitons); 
 - [Eraldo Botelho](https://github.com/SlliperySwan)
 
-### Orientação
+### Orientação:
 
-- [Tássio Sirqueira](https://github.com/tassioferenzini)
+- [Tássio Sirqueira](https://github.com/tassioferenzini);
 - [Jéssica Faciroli](http://lattes.cnpq.br/8540581494874227)
